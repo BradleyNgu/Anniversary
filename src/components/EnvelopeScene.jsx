@@ -9,9 +9,9 @@ import {
 import Sections from "./Sections.jsx";
 import "./scene.css";
 
-function PaperFace({ offset }) {
+function PaperFace() {
   return (
-    <div className="paper-face" style={{ top: offset }}>
+    <div className="paper-face">
       <div className="face-inner">
         <div className="face-monogram">N &amp; B</div>
         <div className="face-title">Happy Anniversary</div>
@@ -76,7 +76,7 @@ export default function EnvelopeScene() {
       x: origin.x,
       y: origin.y + 90,
       opacity: 0,
-      scale: 0.88,
+      scale: 0.42,
     });
 
     // 1. flap swings open and tucks behind
@@ -86,17 +86,17 @@ export default function EnvelopeScene() {
       transition: { duration: 0.75, ease: "easeInOut" },
     });
 
-    // 2. folded letter peeks out of the envelope
+    // 2. folded letter peeks out of the envelope (still compact)
     setLetterUp(true);
     await letter.start({
       x: origin.x,
       y: origin.y - 70,
       opacity: 1,
-      scale: 0.92,
+      scale: 0.52,
       transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
     });
 
-    // 3. envelope sinks away while the letter glides to screen centre
+    // 3. envelope sinks away while the letter glides to centre and grows
     envelope.start({
       y: 380,
       opacity: 0,
@@ -196,11 +196,11 @@ export default function EnvelopeScene() {
                 animate={foldTop}
                 initial={{ rotateX: -180 }}
               >
-                <PaperFace offset={0} />
+                <PaperFace />
               </motion.div>
 
               <div className="panel panel-mid">
-                <PaperFace offset={-154} />
+                <PaperFace />
               </div>
 
               <motion.div
@@ -208,7 +208,7 @@ export default function EnvelopeScene() {
                 animate={foldBot}
                 initial={{ rotateX: 180 }}
               >
-                <PaperFace offset={-308} />
+                <PaperFace />
               </motion.div>
 
               <motion.div
@@ -234,9 +234,9 @@ export default function EnvelopeScene() {
           <div className="open-letter-wrap">
             <motion.div
               className="open-letter"
-              initial={{ opacity: 0, scale: 0.94, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
             >
               <Sections />
             </motion.div>

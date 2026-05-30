@@ -136,8 +136,8 @@
 }
 
 .letter-group {
-  width: 340px;
-  height: 462px;
+  width: var(--letter-width);
+  height: var(--letter-height);
   transform-style: preserve-3d;
   perspective: 2000px;
 }
@@ -151,8 +151,8 @@
 .panel {
   position: absolute;
   left: 0;
-  width: 340px;
-  height: 154px;
+  width: 100%;
+  height: 33.333%;
   overflow: hidden;
   backface-visibility: hidden;
 }
@@ -162,23 +162,35 @@
   transform-origin: center bottom;
 }
 .panel-mid {
-  top: 154px;
+  top: 33.333%;
   transform: translateZ(2px);
   z-index: 2;
 }
 .panel-bot {
-  top: 308px;
+  top: 66.666%;
   transform-origin: center top;
 }
 
-/* the full continuous letter face, sliced by each panel via offset */
+/* full letter face sliced across three panels */
 .paper-face {
   position: absolute;
   left: 0;
-  width: 340px;
-  height: 462px;
+  width: 100%;
+  height: 300%;
   background: linear-gradient(180deg, var(--paper), #f7eede);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.panel-top .paper-face {
+  top: 0;
+}
+
+.panel-mid .paper-face {
+  top: -100%;
+}
+
+.panel-bot .paper-face {
+  top: -200%;
 }
 
 .paper-face::before {
@@ -204,13 +216,13 @@
 
 .face-monogram {
   font-family: "Dancing Script", cursive;
-  font-size: 64px;
+  font-size: clamp(48px, 8vw, 72px);
   color: var(--rose-deep);
   line-height: 1;
 }
 
 .face-title {
-  font-size: 30px;
+  font-size: clamp(22px, 4vw, 34px);
   letter-spacing: 1px;
   color: var(--ink);
 }
@@ -218,11 +230,11 @@
 .face-sub {
   font-style: italic;
   color: var(--ink-soft);
-  font-size: 19px;
+  font-size: clamp(16px, 3vw, 22px);
 }
 
 .face-heart {
-  font-size: 24px;
+  font-size: clamp(20px, 3.5vw, 28px);
   color: var(--rose);
 }
 
@@ -235,11 +247,11 @@
   pointer-events: none;
 }
 .crease-a {
-  top: 147px;
+  top: calc(33.333% - 7px);
   background: linear-gradient(180deg, rgba(90, 60, 40, 0.16), transparent);
 }
 .crease-b {
-  top: 301px;
+  top: calc(66.666% - 7px);
   background: linear-gradient(0deg, rgba(90, 60, 40, 0.16), transparent);
 }
 
@@ -250,14 +262,17 @@
   display: grid;
   place-items: center;
   z-index: 30;
-  padding: 16px;
+  padding: max(8px, env(safe-area-inset-top, 0px))
+    max(8px, env(safe-area-inset-right, 0px))
+    max(8px, env(safe-area-inset-bottom, 0px))
+    max(8px, env(safe-area-inset-left, 0px));
   pointer-events: none;
 }
 
 .open-letter {
   position: relative;
-  width: min(620px, 92vw);
-  height: min(660px, 86vh);
+  width: var(--letter-width);
+  height: var(--letter-height);
   pointer-events: auto;
   background: linear-gradient(180deg, var(--paper), #f7eede);
   border-radius: 10px;
@@ -282,19 +297,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 48px 44px;
+  padding: 24px 28px 16px;
   min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .section-viewport {
+  flex: 1;
   width: 100%;
-  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  min-height: 0;
 }
 
 .section-motion,
@@ -303,6 +318,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
@@ -352,37 +368,87 @@
 
 /* GIF slot — always at bottom of each section */
 .section-gif {
+  display: flex;
+  justify-content: center;
   width: 100%;
   max-width: 440px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 12px;
-  overflow: hidden;
 }
 
 .section-gif--bottom {
   margin-top: 20px;
 }
 
-.section-gif img {
-  display: block;
-  width: 100%;
-  max-height: 160px;
-  object-fit: contain;
-  background: rgba(255, 255, 255, 0.35);
+/* bubble-scissors / scalloped paper edge */
+.section-gif-scallop {
+  display: inline-block;
+  max-width: 100%;
+  filter: drop-shadow(0 3px 10px rgba(90, 50, 40, 0.14));
 }
 
-.section-gif--placeholder {
+.section-gif-frame {
+  --scallop: 8px;
+  display: inline-block;
+  max-width: 100%;
+  padding: calc(10px + var(--scallop));
+  background: linear-gradient(165deg, #fdfbf7 0%, #f3ebe0 100%);
+  border: none;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  -webkit-mask:
+    radial-gradient(var(--scallop) at bottom, #0000 98%, #000 101%) bottom /
+      calc(2 * var(--scallop)) var(--scallop) repeat-x,
+    radial-gradient(var(--scallop) at top, #0000 98%, #000 101%) top /
+      calc(2 * var(--scallop)) var(--scallop) repeat-x,
+    radial-gradient(var(--scallop) at left, #0000 98%, #000 101%) left /
+      var(--scallop) calc(2 * var(--scallop)) repeat-y,
+    radial-gradient(var(--scallop) at right, #0000 98%, #000 101%) right /
+      var(--scallop) calc(2 * var(--scallop)) repeat-y,
+    linear-gradient(#000 0 0) center / calc(100% - 2 * var(--scallop))
+      calc(100% - 2 * var(--scallop)) no-repeat;
+  mask:
+    radial-gradient(var(--scallop) at bottom, #0000 98%, #000 101%) bottom /
+      calc(2 * var(--scallop)) var(--scallop) repeat-x,
+    radial-gradient(var(--scallop) at top, #0000 98%, #000 101%) top /
+      calc(2 * var(--scallop)) var(--scallop) repeat-x,
+    radial-gradient(var(--scallop) at left, #0000 98%, #000 101%) left /
+      var(--scallop) calc(2 * var(--scallop)) repeat-y,
+    radial-gradient(var(--scallop) at right, #0000 98%, #000 101%) right /
+      var(--scallop) calc(2 * var(--scallop)) repeat-y,
+    linear-gradient(#000 0 0) center / calc(100% - 2 * var(--scallop))
+      calc(100% - 2 * var(--scallop)) no-repeat;
+  -webkit-mask-composite: source-over, source-over, source-over, source-over,
+    destination-out;
+  mask-composite: add, add, add, add, subtract;
+}
+
+.section-gif-inner {
+  line-height: 0;
+}
+
+.section-gif-inner img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 360px);
+  max-height: 168px;
+  object-fit: contain;
+}
+
+.section-gif-frame--placeholder .section-gif-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 120px;
-  padding: 20px;
+  line-height: normal;
+  min-width: 150px;
+  min-height: 92px;
+  padding: 14px 18px;
+  color: var(--ink-soft);
   border: 1.5px dashed rgba(176, 130, 90, 0.45);
   background: rgba(255, 255, 255, 0.35);
-  color: var(--ink-soft);
 }
 
 .section-gif-icon {
@@ -403,13 +469,554 @@
   opacity: 0.65;
 }
 
+/* ---------- Scrapbook photo album ---------- */
+.section-area--scrapbook {
+  padding: 20px 24px 14px;
+}
+
+.section-area--scrapbook .section-viewport {
+  overflow: visible;
+}
+
+.section-slide--scrapbook .section-eyebrow {
+  margin-bottom: 8px;
+}
+
+.section-slide--scrapbook .section-title {
+  margin-bottom: 10px;
+  font-size: clamp(28px, 6vw, 38px);
+}
+
+.section-slide--scrapbook .section-body {
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.section-slide--scrapbook .section-gif {
+  margin-top: 12px;
+}
+
+.section-slide--scrapbook .section-gif-inner img {
+  max-height: 110px;
+  max-width: min(100%, 300px);
+}
+
+.scrapbook {
+  width: 100%;
+  max-width: 300px;
+  margin: 6px auto 0;
+  position: relative;
+  z-index: 1;
+}
+
+.scrapbook-spread {
+  perspective: 1000px;
+  overflow: visible;
+  min-height: 200px;
+  padding: 0 6px;
+}
+
+.scrapbook-page-motion {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.scrapbook-page {
+  position: relative;
+  padding: 12px 10px 10px;
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
+    linear-gradient(180deg, #ebe0cc, #dccdb5);
+  background-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px, 100% 100%;
+  box-shadow:
+    inset 0 0 0 1px rgba(120, 90, 60, 0.2),
+    0 6px 18px rgba(90, 60, 40, 0.14);
+}
+
+.scrapbook-page-label {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0.55;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scrapbook-sticker {
+  position: absolute;
+  font-size: 14px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scrapbook-sticker--a {
+  top: 4px;
+  right: 8px;
+  color: var(--rose);
+  transform: rotate(12deg);
+}
+
+.scrapbook-sticker--b {
+  bottom: 6px;
+  left: 8px;
+  color: var(--gold);
+  transform: rotate(-8deg);
+  font-size: 13px;
+}
+
+.scrapbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 7px;
+  position: relative;
+  z-index: 1;
+}
+
+.polaroid {
+  position: relative;
+  margin: 0;
+  padding: 5px 5px 22px;
+  background: #faf8f4;
+  box-shadow:
+    0 1px 4px rgba(60, 40, 30, 0.16),
+    0 4px 10px rgba(60, 40, 30, 0.08);
+  transform: rotate(var(--rotate, 0deg));
+  transition: transform 0.2s ease;
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.03);
+  z-index: 3;
+}
+
+.polaroid-inner {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f0ebe3;
+}
+
+.polaroid-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.polaroid-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  min-height: 68px;
+  border: 1.5px dashed rgba(176, 130, 90, 0.45);
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-soft);
+}
+
+.polaroid-empty-icon {
+  font-size: 16px;
+  color: var(--rose);
+  opacity: 0.45;
+  line-height: 1;
+}
+
+.polaroid-empty-text {
+  font-size: 11px;
+  font-style: italic;
+  text-transform: lowercase;
+}
+
+.polaroid-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  font-size: 13px;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1;
+}
+
+.polaroid-tape {
+  position: absolute;
+  width: 32px;
+  height: 10px;
+  top: -4px;
+  left: 50%;
+  margin-left: -16px;
+  border-radius: 1px;
+  opacity: 0.72;
+  z-index: 2;
+  box-shadow: 0 1px 2px rgba(60, 40, 30, 0.15);
+}
+
+.polaroid-tape--rose {
+  background: linear-gradient(
+    180deg,
+    rgba(224, 150, 165, 0.85),
+    rgba(192, 86, 106, 0.75)
+  );
+}
+
+.polaroid-tape--gold {
+  background: linear-gradient(
+    180deg,
+    rgba(220, 190, 130, 0.9),
+    rgba(201, 162, 75, 0.8)
+  );
+}
+
+.scrapbook-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px 10px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1.5px solid rgba(154, 59, 80, 0.28);
+  box-shadow: 0 2px 8px rgba(90, 60, 40, 0.08);
+  position: relative;
+  z-index: 2;
+}
+
+.scrapbook-nav-btn {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--rose);
+  background: #fff;
+  color: var(--rose-deep);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.scrapbook-nav-btn:hover:not(:disabled) {
+  background: var(--rose);
+  color: #fff;
+}
+
+.scrapbook-nav-btn:disabled {
+  opacity: 1;
+  color: var(--ink-soft);
+  border-color: rgba(154, 59, 80, 0.22);
+  background: rgba(255, 255, 255, 0.5);
+  cursor: default;
+}
+
+.scrapbook-nav-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rose-deep);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+/* ---------- Trivia game ---------- */
+.section-slide--trivia .section-title {
+  margin-bottom: 12px;
+}
+
+.section-area--trivia .section-viewport {
+  align-items: stretch;
+}
+
+.section-area--trivia .section-motion {
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+}
+
+.section-slide--trivia {
+  height: 100%;
+  min-height: 0;
+  justify-content: center;
+}
+
+.section-slide--trivia .trivia {
+  flex: 0 0 auto;
+}
+
+.section-area--trivia {
+  padding: 20px 24px 14px;
+}
+
+.trivia {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-gif-motion {
+  width: 100%;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-slide--trivia .section-gif-motion {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.section-slide--trivia-idle .section-gif-motion {
+  margin-top: 0;
+  padding-top: 14px;
+}
+
+.section-slide--trivia-idle .section-eyebrow,
+.section-slide--trivia-idle .section-title {
+  flex-shrink: 0;
+}
+
+.trivia-panel {
+  width: 100%;
+  text-align: center;
+}
+
+.trivia-panel--round {
+  position: relative;
+  overflow: visible;
+}
+
+.trivia-gif-preload {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.trivia--gif-active {
+  position: relative;
+  z-index: 2;
+}
+
+.section-area--trivia:has(.trivia--gif-active) .section-viewport {
+  overflow: visible;
+}
+
+.trivia-answers {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.trivia-intro-title {
+  font-size: clamp(28px, 5vw, 38px);
+  color: var(--rose-deep);
+  margin-bottom: 12px;
+}
+
+.trivia-intro-body {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+
+.trivia-progress {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.trivia-question {
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.trivia-answer {
+  width: 100%;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 17px;
+  line-height: 1.35;
+  text-align: left;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(176, 130, 90, 0.45);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.trivia-answer:hover:not(:disabled) {
+  border-color: var(--rose);
+  transform: translateY(-1px);
+}
+
+.trivia-answer:disabled {
+  cursor: default;
+}
+
+.trivia-answer--correct {
+  background: rgba(72, 140, 90, 0.2);
+  border-color: #3d8b52;
+  color: #2a5c38;
+}
+
+.trivia-answer--wrong {
+  background: rgba(180, 60, 70, 0.18);
+  border-color: #b03a50;
+  color: #7a2435;
+}
+
+.trivia-answer--reveal {
+  background: rgba(72, 140, 90, 0.2);
+  border-color: #3d8b52;
+  color: #2a5c38;
+}
+
+.trivia-answer--muted {
+  opacity: 0.45;
+}
+
+.trivia-btn {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  padding: 10px 26px;
+  border-radius: 999px;
+  border: 1.5px solid var(--rose);
+  background: transparent;
+  color: var(--rose-deep);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.trivia-btn:hover {
+  background: var(--rose);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.trivia-btn--primary {
+  background: var(--rose);
+  color: #fff;
+}
+
+.trivia-btn--primary:hover {
+  background: var(--rose-deep);
+}
+
+.trivia-gif-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(253, 248, 241, 0.92);
+  border-radius: 12px;
+  z-index: 5;
+}
+
+.trivia-gif-popup {
+  padding: 10px;
+}
+
+.trivia-gif-img {
+  display: block;
+  max-width: min(300px, 88vw);
+  max-height: 180px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.trivia-gif-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 24px;
+  min-width: 180px;
+  border: 1.5px dashed rgba(176, 130, 90, 0.5);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 15px;
+}
+
+.trivia-gif-placeholder-icon {
+  font-size: 24px;
+  color: var(--rose);
+  opacity: 0.5;
+}
+
+.trivia-gif-placeholder-path {
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  font-style: normal;
+  opacity: 0.65;
+}
+
+.trivia-score-title {
+  font-size: clamp(32px, 6vw, 44px);
+  color: var(--rose-deep);
+  margin-bottom: 14px;
+}
+
+.trivia-score {
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.trivia-score strong {
+  color: var(--rose-deep);
+  font-size: 26px;
+}
+
+.trivia-score-note {
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+
 /* nav */
 .nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 26px 22px;
+  padding: 18px 32px 34px;
   gap: 12px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .nav-btn {
@@ -466,8 +1073,140 @@
   }
 
   .section-area {
-    padding: 36px 26px;
+    padding: 16px 14px 10px;
   }
+
+  .section-area--trivia {
+    padding: 10px 16px 6px;
+  }
+
+  .section-gif-inner img {
+    max-height: 132px;
+    max-width: min(100%, 320px);
+  }
+
+  .section-slide--trivia-idle .section-gif-motion {
+    padding-top: 12px;
+  }
+
+  .section-slide--trivia .section-eyebrow {
+    margin-bottom: 6px;
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .section-slide--trivia .section-title {
+    font-size: clamp(22px, 6.5vw, 28px);
+    margin-bottom: 6px;
+  }
+
+  .trivia {
+    max-width: 100%;
+    min-height: 0;
+  }
+
+  .trivia-progress {
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+
+  .trivia-question {
+    font-size: 17px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .trivia-answers {
+    gap: 10px;
+    padding: 0 14px;
+  }
+
+  .trivia-answer {
+    font-size: 16px;
+    line-height: 1.4;
+    padding: 14px 14px;
+    min-height: 48px;
+  }
+
+  .trivia-intro-title {
+    font-size: clamp(24px, 6.5vw, 30px);
+  }
+
+  .trivia-intro-body {
+    font-size: 16px;
+    margin-bottom: 18px;
+  }
+
+  .trivia-btn {
+    font-size: 17px;
+    padding: 12px 28px;
+    min-height: 44px;
+  }
+
+  .trivia-gif-img {
+    max-width: min(300px, 92vw);
+    max-height: 200px;
+  }
+
+  .trivia-gif-overlay {
+    inset: 0;
+  }
+
+  .section-slide--trivia .section-gif-inner img {
+    max-height: 132px;
+    max-width: min(100%, 320px);
+  }
+
+  .nav-bar {
+    padding: 14px 24px 30px;
+  }
+
+  .scrapbook {
+    max-width: 268px;
+    margin-top: 4px;
+  }
+
+  .scrapbook-spread {
+    min-height: 185px;
+    padding: 0 4px;
+  }
+
+  .scrapbook-page {
+    padding: 10px 8px 8px;
+  }
+
+  .scrapbook-grid {
+    gap: 7px 6px;
+  }
+
+  .polaroid {
+    padding: 4px 4px 20px;
+  }
+
+  .polaroid-caption {
+    font-size: 12px;
+  }
+
+  .scrapbook-nav {
+    margin-top: 10px;
+    padding: 6px 8px;
+  }
+
+  .scrapbook-nav-btn {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+
+  .scrapbook-nav-count {
+    font-size: 12px;
+  }
+
+  .section-slide--scrapbook .section-gif-inner img {
+    max-height: 128px;
+    max-width: min(100%, 320px);
+  }
+
   .section-body {
     font-size: 18px;
   }

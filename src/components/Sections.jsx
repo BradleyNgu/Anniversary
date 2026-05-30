@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import PhotoAlbum from "./PhotoAlbum.jsx";
+import TriviaGame from "./TriviaGame.jsx";
 import SectionGif from "./SectionGif.jsx";
 
 const sections = [
   {
+    id: "trivia",
+    type: "trivia",
     eyebrow: "Part One",
     title: "Trivia",
-    body: "Little questions about us — answers and surprises will live here.",
+    body: "How well do you know us? Tap start and find out.",
     gif: {
       position: "bottom",
       src: "/assets/CatEyes.gif",
@@ -14,12 +18,13 @@ const sections = [
       placeholderLabel: "Trivia GIF",
       fileHint: "CatEyes.gif",
     },
-    placeholder: "Your trivia game or quiz content goes here.",
   },
   {
+    id: "album",
+    type: "scrapbook",
     eyebrow: "Part Two",
     title: "Photo Album",
-    body: "Our favorite snapshots, one scroll at a time.",
+    body: "Snapshots tucked into our little scrapbook.",
     gif: {
       position: "bottom",
       src: "/assets/CatTails.gif",
@@ -27,9 +32,9 @@ const sections = [
       placeholderLabel: "Photo album GIF",
       fileHint: "CatTails.gif",
     },
-    placeholder: "Your photo gallery will go here.",
   },
   {
+    id: "letter",
     eyebrow: "Part Three",
     title: "Love Letter",
     titleScript: true,
@@ -44,7 +49,6 @@ const sections = [
     placeholder: "Your love letter text will go here.",
   },
 ];
-
 const variants = {
   enter: (dir) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
   center: { opacity: 1, x: 0 },
@@ -52,29 +56,53 @@ const variants = {
 };
 
 function SectionContent({ section }) {
+  const [triviaPhase, setTriviaPhase] = useState("start");
+  const isScrapbook = section.type === "scrapbook";
+  const isTrivia = section.type === "trivia";
+  const showGif = section.gif && (!isTrivia || triviaPhase === "start");
+  const triviaIdle = isTrivia && (triviaPhase === "start" || triviaPhase === "finished");
+
   return (
-    <div className="section-slide">
+    <div
+      className={`section-slide${isScrapbook ? " section-slide--scrapbook" : ""}${isTrivia ? " section-slide--trivia" : ""}${triviaIdle ? " section-slide--trivia-idle" : ""}`}
+    >
       <div className="section-eyebrow">{section.eyebrow}</div>
       <h1 className={`section-title${section.titleScript ? " script" : ""}`}>
         {section.title}
       </h1>
-      <p className="section-body">{section.body}</p>
-      {section.placeholder && (
-        <div className="section-placeholder">{section.placeholder}</div>
+      {!isTrivia && <p className="section-body">{section.body}</p>}
+      {isTrivia ? (
+        <TriviaGame onPhaseChange={setTriviaPhase} />
+      ) : isScrapbook ? (
+        <PhotoAlbum />
+      ) : (
+        section.placeholder && (
+          <div className="section-placeholder">{section.placeholder}</div>
+        )
       )}
-      {section.gif && (
-        <SectionGif
-          src={section.gif.src ?? null}
-          position="bottom"
-          alt={section.gif.alt}
-          placeholderLabel={section.gif.placeholderLabel}
-          fileHint={section.gif.fileHint}
-        />
-      )}
+      <AnimatePresence>
+        {showGif && (
+          <motion.div
+            key="section-gif"
+            className="section-gif-motion"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <SectionGif
+              src={section.gif.src ?? null}
+              position="bottom"
+              alt={section.gif.alt}
+              placeholderLabel={section.gif.placeholderLabel}
+              fileHint={section.gif.fileHint}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
 export default function Sections() {
   const [[index, dir], setState] = useState([0, 0]);
   const total = sections.length;
@@ -89,7 +117,9 @@ export default function Sections() {
 
   return (
     <>
-      <div className="section-area">
+      <div
+        className={`section-area${s.type === "scrapbook" ? " section-area--scrapbook" : ""}${s.type === "trivia" ? " section-area--trivia" : ""}`}
+      >
         <div className="section-viewport">
           <AnimatePresence mode="wait" custom={dir}>
             <motion.div
