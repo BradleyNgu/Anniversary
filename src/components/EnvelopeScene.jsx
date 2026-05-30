@@ -25,8 +25,12 @@ function PaperFace({ offset }) {
 function envelopeOffset(el) {
   if (!el) return { x: 0, y: 120 };
   const r = el.getBoundingClientRect();
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
+  const vw = window.visualViewport?.width ?? window.innerWidth;
+  const vh = window.visualViewport?.height ?? window.innerHeight;
+  const vleft = window.visualViewport?.offsetLeft ?? 0;
+  const vtop = window.visualViewport?.offsetTop ?? 0;
+  const cx = vleft + vw / 2;
+  const cy = vtop + vh / 2;
   return {
     x: r.left + r.width / 2 - cx,
     y: r.top + r.height / 2 - cy,
@@ -48,16 +52,19 @@ export default function EnvelopeScene() {
 
   useEffect(() => {
     const fit = () => {
-      const s = Math.min(
-        1,
-        (window.innerWidth - 32) / 460,
-        (window.innerHeight - 32) / 560
-      );
+      const vw = window.visualViewport?.width ?? window.innerWidth;
+      const vh = window.visualViewport?.height ?? window.innerHeight;
+      const pad = 32;
+      const s = Math.min(1, (vw - pad) / 460, (vh - pad) / 560);
       setScale(s);
     };
     fit();
     window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
+    window.visualViewport?.addEventListener("resize", fit);
+    return () => {
+      window.removeEventListener("resize", fit);
+      window.visualViewport?.removeEventListener("resize", fit);
+    };
   }, []);
 
   const open = async () => {
@@ -123,13 +130,15 @@ export default function EnvelopeScene() {
     <div className="stage-wrap">
       <div className="stage" style={{ "--stage-scale": scale }}>
         {step === "idle" && (
-          <motion.div
-            className="env-hint script"
-            animate={{ y: [0, -7, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            click to open &#9825;
-          </motion.div>
+          <div className="env-hint-wrap">
+            <motion.div
+              className="env-hint script"
+              animate={{ y: [0, -7, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              click to open &#9825;
+            </motion.div>
+          </div>
         )}
 
         {/* ----- Envelope back (behind the letter) ----- */}

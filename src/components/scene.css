@@ -1,10 +1,15 @@
 .stage-wrap {
   position: fixed;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
-  padding: 16px;
+  padding: max(16px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
+  overflow: hidden;
 }
 
 /* fixed-size design stage that we scale to fit the viewport */
@@ -12,8 +17,12 @@
   position: relative;
   width: 460px;
   height: 560px;
+  flex-shrink: 0;
   transform: scale(var(--stage-scale, 1));
   transform-origin: center center;
+  /* shrink layout footprint to match scaled visual size */
+  margin: calc(560px * (var(--stage-scale, 1) - 1) / 2)
+    calc(460px * (var(--stage-scale, 1) - 1) / 2);
 }
 
 /* ---------- Envelope ----------
@@ -21,11 +30,13 @@
    sandwiched between them (between flaps and back). */
 .env-layer {
   position: absolute;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: 40px;
   width: 460px;
   height: 300px;
-  margin-left: -230px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .env-front {
@@ -33,17 +44,22 @@
   perspective: 1400px;
 }
 
-.env-hint {
+.env-hint-wrap {
   position: absolute;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: 348px;
-  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.env-hint {
   white-space: nowrap;
   font-size: 22px;
   color: var(--rose-deep);
   text-align: center;
-  pointer-events: none;
-  z-index: 40;
 }
 
 .env-shadow {
@@ -439,6 +455,16 @@
 }
 
 @media (max-width: 520px) {
+  .env-layer {
+    top: calc(50% - 150px);
+    bottom: auto;
+  }
+
+  .env-hint-wrap {
+    top: calc(50% - 198px);
+    bottom: auto;
+  }
+
   .section-area {
     padding: 36px 26px;
   }
