@@ -13,7 +13,7 @@ function PaperFace({ offset }) {
   return (
     <div className="paper-face" style={{ top: offset }}>
       <div className="face-inner">
-        <div className="face-monogram">A &amp; B</div>
+        <div className="face-monogram">N &amp; B</div>
         <div className="face-title">Happy Anniversary</div>
         <div className="face-sub">our story, unfolded</div>
         <div className="face-heart">&#9829;</div>

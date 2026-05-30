@@ -1,31 +1,47 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import SectionGif from "./SectionGif.jsx";
 
 const sections = [
   {
-    eyebrow: "Open me first",
-    title: "Happy Anniversary",
+    eyebrow: "Part One",
+    title: "Trivia",
+    body: "Little questions about us — answers and surprises will live here.",
+    gif: {
+      position: "bottom",
+      src: "/assets/CatEyes.gif",
+      alt: "Cat eyes animation",
+      placeholderLabel: "Trivia GIF",
+      fileHint: "CatEyes.gif",
+    },
+    placeholder: "Your trivia game or quiz content goes here.",
+  },
+  {
+    eyebrow: "Part Two",
+    title: "Photo Album",
+    body: "Our favorite snapshots, one scroll at a time.",
+    gif: {
+      position: "bottom",
+      src: "/assets/CatTails.gif",
+      alt: "Cat tails animation",
+      placeholderLabel: "Photo album GIF",
+      fileHint: "CatTails.gif",
+    },
+    placeholder: "Your photo gallery will go here.",
+  },
+  {
+    eyebrow: "Part Three",
+    title: "Love Letter",
     titleScript: true,
-    body: "Here begins our little keepsake. Tap through each page — there's something waiting on every one of them.",
-    placeholder: null,
-  },
-  {
-    eyebrow: "Chapter One",
-    title: "How It All Started",
-    body: "A space saved for the story of our beginning.",
-    placeholder: "Section coming soon — photos, words, and the day it all began.",
-  },
-  {
-    eyebrow: "Chapter Two",
-    title: "Our Favorite Moments",
-    body: "A space saved for the memories we keep coming back to.",
-    placeholder: "Section coming soon — a gallery of moments will live here.",
-  },
-  {
-    eyebrow: "Chapter Three",
-    title: "Here's To Us",
-    body: "A space saved for everything still ahead of us.",
-    placeholder: "Section coming soon — a note about the years to come.",
+    body: "Words from the heart — read them when you're ready.",
+    gif: {
+      position: "bottom",
+      src: null,
+      alt: "Love letter animation",
+      placeholderLabel: "Love letter GIF",
+      fileHint: "love-letter.gif",
+    },
+    placeholder: "Your love letter text will go here.",
   },
 ];
 
@@ -34,6 +50,30 @@ const variants = {
   center: { opacity: 1, x: 0 },
   exit: (dir) => ({ opacity: 0, x: dir > 0 ? -60 : 60 }),
 };
+
+function SectionContent({ section }) {
+  return (
+    <div className="section-slide">
+      <div className="section-eyebrow">{section.eyebrow}</div>
+      <h1 className={`section-title${section.titleScript ? " script" : ""}`}>
+        {section.title}
+      </h1>
+      <p className="section-body">{section.body}</p>
+      {section.placeholder && (
+        <div className="section-placeholder">{section.placeholder}</div>
+      )}
+      {section.gif && (
+        <SectionGif
+          src={section.gif.src ?? null}
+          position="bottom"
+          alt={section.gif.alt}
+          placeholderLabel={section.gif.placeholderLabel}
+          fileHint={section.gif.fileHint}
+        />
+      )}
+    </div>
+  );
+}
 
 export default function Sections() {
   const [[index, dir], setState] = useState([0, 0]);
@@ -60,16 +100,9 @@ export default function Sections() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.35, ease: "easeInOut" }}
-              style={{ width: "100%" }}
+              className="section-motion"
             >
-              <div className="section-eyebrow">{s.eyebrow}</div>
-              <h1 className={`section-title${s.titleScript ? " script" : ""}`}>
-                {s.title}
-              </h1>
-              <p className="section-body">{s.body}</p>
-              {s.placeholder && (
-                <div className="section-placeholder">{s.placeholder}</div>
-              )}
+              <SectionContent section={s} />
             </motion.div>
           </AnimatePresence>
         </div>

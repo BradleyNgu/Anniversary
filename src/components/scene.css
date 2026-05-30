@@ -281,6 +281,15 @@
   overflow: hidden;
 }
 
+.section-motion,
+.section-slide {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 .section-eyebrow {
   text-transform: uppercase;
   letter-spacing: 4px;
@@ -304,7 +313,10 @@
   font-size: 20px;
   line-height: 1.6;
   color: var(--ink);
+  width: 100%;
   max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-placeholder {
@@ -312,11 +324,67 @@
   padding: 26px;
   width: 100%;
   max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
   border: 1.5px dashed rgba(176, 130, 90, 0.5);
   border-radius: 10px;
   color: var(--ink-soft);
   font-style: italic;
   background: rgba(255, 255, 255, 0.4);
+  text-align: center;
+}
+
+/* GIF slot — always at bottom of each section */
+.section-gif {
+  width: 100%;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.section-gif--bottom {
+  margin-top: 20px;
+}
+
+.section-gif img {
+  display: block;
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.section-gif--placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 120px;
+  padding: 20px;
+  border: 1.5px dashed rgba(176, 130, 90, 0.45);
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--ink-soft);
+}
+
+.section-gif-icon {
+  font-size: 28px;
+  color: var(--rose);
+  opacity: 0.5;
+  line-height: 1;
+}
+
+.section-gif-label {
+  font-size: 17px;
+  font-style: italic;
+}
+
+.section-gif-path {
+  font-size: 12px;
+  font-family: ui-monospace, monospace;
+  opacity: 0.65;
 }
 
 /* nav */
