@@ -1,0 +1,76 @@
+:root {
+  --bg-1: #f7e7e1;
+  --bg-2: #e9c7c0;
+  --bg-3: #d9a7a0;
+  --paper: #fdf8f1;
+  --paper-edge: #f0e6d6;
+  --ink: #5b3a36;
+  --ink-soft: #8a6a64;
+  --rose: #c0566a;
+  --rose-deep: #9a3b50;
+  --gold: #c9a24b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: var(--ink);
+  background: radial-gradient(
+      1200px 800px at 50% -10%,
+      var(--bg-1),
+      transparent 60%
+    ),
+    linear-gradient(160deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.script {
+  font-family: "Dancing Script", cursive;
+}
+
+/* floating hearts background */
+.heart-field {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart-field span {
+  position: absolute;
+  bottom: -40px;
+  color: rgba(192, 86, 106, 0.35);
+  animation: floatUp linear infinite;
+  font-size: 18px;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.6) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-110vh) scale(1) rotate(40deg);
+    opacity: 0;
+  }
+}

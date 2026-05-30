@@ -1,0 +1,380 @@
+.stage-wrap {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  padding: 16px;
+}
+
+/* fixed-size design stage that we scale to fit the viewport */
+.stage {
+  position: relative;
+  width: 460px;
+  height: 560px;
+  transform: scale(var(--stage-scale, 1));
+  transform-origin: center center;
+}
+
+/* ---------- Envelope ----------
+   Split into a back layer and a front layer so the letter can sit
+   sandwiched between them (between flaps and back). */
+.env-layer {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  width: 460px;
+  height: 300px;
+  margin-left: -230px;
+}
+
+.env-front {
+  transform-style: preserve-3d;
+  perspective: 1400px;
+}
+
+.env-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 348px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 22px;
+  color: var(--rose-deep);
+  text-align: center;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.env-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 340px;
+  height: 36px;
+  margin-left: -170px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(90, 40, 50, 0.28),
+    transparent 72%
+  );
+  filter: blur(4px);
+  z-index: 0;
+}
+
+/* SVG envelope pieces — vector-clean at any resolution */
+.env-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.env-top-flap {
+  position: absolute;
+  inset: 0;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+}
+
+.env-svg-top {
+  overflow: visible;
+}
+
+/* wax seal centered where all flaps meet */
+.wax-seal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #e05a72, #9a2740 72%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 220, 230, 0.35),
+    inset 0 -3px 6px rgba(60, 10, 25, 0.35),
+    0 5px 12px rgba(80, 20, 30, 0.38);
+  display: grid;
+  place-items: center;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.wax-seal span {
+  font-family: "Dancing Script", cursive;
+  font-size: 22px;
+  color: rgba(255, 235, 240, 0.95);
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 2px rgba(80, 10, 25, 0.3);
+}
+
+/* ---------- Letter (viewport-centred overlay) ---------- */
+.letter-stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.letter-group {
+  width: 340px;
+  height: 462px;
+  transform-style: preserve-3d;
+  perspective: 2000px;
+}
+
+.fold-letter {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.panel {
+  position: absolute;
+  left: 0;
+  width: 340px;
+  height: 154px;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.panel-top {
+  top: 0;
+  transform-origin: center bottom;
+}
+.panel-mid {
+  top: 154px;
+  transform: translateZ(2px);
+  z-index: 2;
+}
+.panel-bot {
+  top: 308px;
+  transform-origin: center top;
+}
+
+/* the full continuous letter face, sliced by each panel via offset */
+.paper-face {
+  position: absolute;
+  left: 0;
+  width: 340px;
+  height: 462px;
+  background: linear-gradient(180deg, var(--paper), #f7eede);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.paper-face::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(176, 130, 90, 0.35);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.face-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+  gap: 10px;
+}
+
+.face-monogram {
+  font-family: "Dancing Script", cursive;
+  font-size: 64px;
+  color: var(--rose-deep);
+  line-height: 1;
+}
+
+.face-title {
+  font-size: 30px;
+  letter-spacing: 1px;
+  color: var(--ink);
+}
+
+.face-sub {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 19px;
+}
+
+.face-heart {
+  font-size: 24px;
+  color: var(--rose);
+}
+
+/* crease shadow shown while folded, fades on unfold */
+.crease {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  pointer-events: none;
+}
+.crease-a {
+  top: 147px;
+  background: linear-gradient(180deg, rgba(90, 60, 40, 0.16), transparent);
+}
+.crease-b {
+  top: 301px;
+  background: linear-gradient(0deg, rgba(90, 60, 40, 0.16), transparent);
+}
+
+/* ---------- Interactive open letter ---------- */
+.open-letter-wrap {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 30;
+  padding: 16px;
+  pointer-events: none;
+}
+
+.open-letter {
+  position: relative;
+  width: min(620px, 92vw);
+  height: min(660px, 86vh);
+  pointer-events: auto;
+  background: linear-gradient(180deg, var(--paper), #f7eede);
+  border-radius: 10px;
+  box-shadow: 0 30px 70px rgba(120, 60, 60, 0.35),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 30;
+}
+
+.open-letter::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(176, 130, 90, 0.4);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.section-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 44px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.section-viewport {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.section-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 13px;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: clamp(30px, 5vw, 46px);
+  color: var(--rose-deep);
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.section-title.script {
+  font-size: clamp(40px, 7vw, 62px);
+}
+
+.section-body {
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 440px;
+}
+
+.section-placeholder {
+  margin-top: 22px;
+  padding: 26px;
+  width: 100%;
+  max-width: 440px;
+  border: 1.5px dashed rgba(176, 130, 90, 0.5);
+  border-radius: 10px;
+  color: var(--ink-soft);
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* nav */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 26px 22px;
+  gap: 12px;
+}
+
+.nav-btn {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1.5px solid var(--rose);
+  background: transparent;
+  color: var(--rose-deep);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--rose);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.nav-dots {
+  display: flex;
+  gap: 9px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(154, 59, 80, 0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.dot.active {
+  background: var(--rose-deep);
+  transform: scale(1.25);
+}
+
+@media (max-width: 520px) {
+  .section-area {
+    padding: 36px 26px;
+  }
+  .section-body {
+    font-size: 18px;
+  }
+}
