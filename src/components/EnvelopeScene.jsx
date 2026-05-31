@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import { preloadGifs } from "../assets/gifs.js";
 import {
   EnvelopeBack,
@@ -10,14 +10,32 @@ import {
 import Sections from "./Sections.jsx";
 import "./scene.css";
 
+function FaceContent() {
+  return (
+    <>
+      <div className="face-monogram">Nicole &amp; Bradley</div>
+      <div className="face-title">Happy Anniversary</div>
+      <div className="face-sub">our story, unfolded</div>
+      <div className="face-heart">&#9829;</div>
+    </>
+  );
+}
+
 function PaperFace() {
   return (
     <div className="paper-face">
       <div className="face-inner">
-        <div className="face-monogram">N &amp; B</div>
-        <div className="face-title">Happy Anniversary</div>
-        <div className="face-sub">our story, unfolded</div>
-        <div className="face-heart">&#9829;</div>
+        <FaceContent />
+      </div>
+    </div>
+  );
+}
+
+function LetterCover() {
+  return (
+    <div className="letter-cover">
+      <div className="face-inner">
+        <FaceContent />
       </div>
     </div>
   );
@@ -39,7 +57,7 @@ function envelopeOffset(el) {
 }
 
 export default function EnvelopeScene() {
-  const [step, setStep] = useState("idle"); // idle -> opening -> open
+  const [step, setStep] = useState("idle"); // idle -> opening -> flipping -> open
   const [flapOpen, setFlapOpen] = useState(false);
   const [letterUp, setLetterUp] = useState(false);
   const [scale, setScale] = useState(1);
@@ -50,6 +68,7 @@ export default function EnvelopeScene() {
   const envelope = useAnimationControls();
   const foldTop = useAnimationControls();
   const foldBot = useAnimationControls();
+  const flip = useAnimationControls();
 
   useEffect(() => {
     preloadGifs();
@@ -126,10 +145,41 @@ export default function EnvelopeScene() {
       }),
     ]);
 
-    setStep("open");
+    // Hold the unfolded letter, then flip horizontally to the first section
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setStep("flipping");
   };
 
-  const folding = step !== "open";
+  useEffect(() => {
+    if (step !== "flipping") return;
+
+    let active = true;
+
+    const runFlip = async () => {
+      // Wait for the flip card to mount before driving animation controls
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      if (!active) return;
+
+      flip.set({ rotateY: 0 });
+      await flip.start({
+        rotateY: -180,
+        transition: { duration: 0.9, ease: [0.42, 0, 0.2, 1] },
+      });
+
+      if (active) setStep("open");
+    };
+
+    runFlip();
+
+    return () => {
+      active = false;
+    };
+  }, [step, flip]);
+
+  const folding = step === "opening";
+  const showFlipLetter = step === "flipping" || step === "open";
 
   return (
     <div className="stage-wrap">
@@ -233,21 +283,28 @@ export default function EnvelopeScene() {
         </div>
       )}
 
-      {/* ----- Opened, interactive letter (full size, outside scaled stage) ----- */}
-      <AnimatePresence>
-        {step === "open" && (
-          <div className="open-letter-wrap">
-            <motion.div
-              className="open-letter"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-            >
-              <Sections />
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* ----- Cover flips over horizontally to reveal sections ----- */}
+      {showFlipLetter && (
+        <div
+          className={`letter-flip-scene${step === "open" ? " letter-flip-scene--open" : ""}`}
+        >
+          <motion.div
+            className="letter-flip"
+            animate={flip}
+            initial={{ rotateY: 0 }}
+            style={{ transformPerspective: 1600 }}
+          >
+            <div className="letter-flip-face letter-flip-face--front">
+              <LetterCover />
+            </div>
+            <div className="letter-flip-face letter-flip-face--back">
+              <div className="open-letter">
+                <Sections />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { preloadGifs } from "../assets/gifs.js";
 import PhotoAlbum from "./PhotoAlbum.jsx";
 import TriviaGame from "./TriviaGame.jsx";
 import SectionGif from "./SectionGif.jsx";
+import FlowerHeart from "./FlowerHeart.jsx";
 
 const sections = [
   {
@@ -49,33 +50,44 @@ const sections = [
     },
     placeholder: "Your love letter text will go here.",
   },
+  {
+    id: "flower",
+    type: "flower",
+    eyebrow: "Part Four",
+    title: "For You",
+    titleScript: true,
+    body: "A little something that blooms, just like us.",
+  },
 ];
 const variants = {
-  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
-  center: { opacity: 1, x: 0 },
-  exit: (dir) => ({ opacity: 0, x: dir > 0 ? -60 : 60 }),
+  enter: { opacity: 0 },
+  center: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 function SectionContent({ section }) {
   const [triviaPhase, setTriviaPhase] = useState("start");
   const isScrapbook = section.type === "scrapbook";
   const isTrivia = section.type === "trivia";
+  const isFlower = section.type === "flower";
   const showGif = section.gif && (!isTrivia || triviaPhase === "start");
   const triviaIdle = isTrivia && (triviaPhase === "start" || triviaPhase === "finished");
 
   return (
     <div
-      className={`section-slide${isScrapbook ? " section-slide--scrapbook" : ""}${isTrivia ? " section-slide--trivia" : ""}${triviaIdle ? " section-slide--trivia-idle" : ""}`}
+      className={`section-slide${isScrapbook ? " section-slide--scrapbook" : ""}${isTrivia ? " section-slide--trivia" : ""}${triviaIdle ? " section-slide--trivia-idle" : ""}${isFlower ? " section-slide--flower" : ""}`}
     >
       <div className="section-eyebrow">{section.eyebrow}</div>
       <h1 className={`section-title${section.titleScript ? " script" : ""}`}>
         {section.title}
       </h1>
-      {!isTrivia && <p className="section-body">{section.body}</p>}
+      {!isTrivia && !isFlower && <p className="section-body">{section.body}</p>}
       {isTrivia ? (
         <TriviaGame onPhaseChange={setTriviaPhase} />
       ) : isScrapbook ? (
         <PhotoAlbum />
+      ) : isFlower ? (
+        <FlowerHeart />
       ) : (
         section.placeholder && (
           <div className="section-placeholder">{section.placeholder}</div>
@@ -99,7 +111,7 @@ function SectionContent({ section }) {
   );
 }
 export default function Sections() {
-  const [[index, dir], setState] = useState([0, 0]);
+  const [index, setIndex] = useState(0);
   const total = sections.length;
 
   useEffect(() => {
@@ -111,7 +123,7 @@ export default function Sections() {
   const go = (next) => {
     const target = Math.min(total - 1, Math.max(0, next));
     if (target === index) return;
-    setState([target, target > index ? 1 : -1]);
+    setIndex(target);
   };
 
   const s = sections[index];
@@ -122,10 +134,9 @@ export default function Sections() {
         className={`section-area${s.type === "scrapbook" ? " section-area--scrapbook" : ""}${s.type === "trivia" ? " section-area--trivia" : ""}`}
       >
         <div className="section-viewport">
-          <AnimatePresence mode="wait" custom={dir}>
+          <AnimatePresence mode="wait">
             <motion.div
               key={index}
-              custom={dir}
               variants={variants}
               initial="enter"
               animate="center"

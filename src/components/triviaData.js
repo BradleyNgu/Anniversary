@@ -14,22 +14,22 @@ export const triviaIntro = {
 export const triviaQuestions = [
   {
     id: 1,
-    question: "Sample question 1 — where did we first meet?",
+    question: "Question 1 — where was our first meet?",
     answers: [
-      { text: "Sample answer A", correct: false },
-      { text: "Sample answer B (mark correct)", correct: true },
-      { text: "Sample answer C", correct: false },
-      { text: "Sample answer D", correct: false },
+      { text: "Carleton University", correct: false },
+      { text: "Movie Theatre", correct: true },
+      { text: "Karoke", correct: false },
+      { text: "Square One Mall", correct: false },
     ],
   },
   {
     id: 2,
-    question: "Sample question 2 — what's our song?",
+    question: "Question 2 — When did we start officially dating?",
     answers: [
-      { text: "Sample answer A", correct: false },
-      { text: "Sample answer B", correct: false },
-      { text: "Sample answer C (mark correct)", correct: true },
-      { text: "Sample answer D", correct: false },
+      { text: "July 21, 2025", correct: false },
+      { text: "May 28, 2025", correct: false },
+      { text: "July 20, 2025", correct: true },
+      { text: "June 1, 2025", correct: false },
     ],
   },
   {

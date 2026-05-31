@@ -124,7 +124,11 @@ export function EnvelopeTopFlap() {
 export function WaxSeal() {
   return (
     <div className="wax-seal" aria-hidden="true">
-      <span>N&amp;B</span>
+      <span>
+        Nicole
+        <br />
+        &amp; Bradley
+      </span>
     </div>
   );
 }
