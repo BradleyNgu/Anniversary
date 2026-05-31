@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { preloadGifs } from "../assets/gifs.js";
+import { isGifCached, preloadGifs } from "../assets/gifs.js";
 import { correctAnswerGif, triviaIntro, triviaQuestions, wrongAnswerGif } from "./triviaData.js";
 
 const FEEDBACK_MIN_MS = 700;
@@ -25,10 +25,7 @@ function preloadImages(sources) {
 }
 
 function isImageCached(src) {
-  if (!src) return false;
-  const img = new Image();
-  img.src = src;
-  return img.complete && img.naturalWidth > 0;
+  return isGifCached(src);
 }
 
 export default function TriviaGame({ onPhaseChange }) {
@@ -211,57 +208,63 @@ export default function TriviaGame({ onPhaseChange }) {
             exit={{ opacity: 0, y: -8 }}
             transition={fadeTransition}
           >
-            <div className="trivia-progress">
-              Question {qIndex + 1} of {total}
-            </div>
-            <p className="trivia-question">{current.question}</p>
-            <div className="trivia-answers">
-              {current.answers.map((answer, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`trivia-answer ${answerClass(index)}`}
-                  onClick={() => pickAnswer(index)}
-                  disabled={locked}
-                >
-                  {answer.text}
-                </button>
-              ))}
-            </div>
+            <div className={`trivia-round-body${phase === "gif" ? " trivia-round-body--gif" : ""}`}>
+              <div className="trivia-round-content">
+                <div className="trivia-round-stack">
+                  <div className="trivia-progress">
+                    Question {qIndex + 1} of {total}
+                  </div>
+                  <p className="trivia-question">{current.question}</p>
+                  <div className="trivia-answers">
+                    {current.answers.map((answer, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`trivia-answer ${answerClass(index)}`}
+                        onClick={() => pickAnswer(index)}
+                        disabled={locked}
+                      >
+                        {answer.text}
+                      </button>
+                    ))}
+                  </div>
 
-            {phase === "feedback" && reactionGifSrc && (
-              <img
-                src={reactionGifSrc}
-                alt=""
-                className="trivia-gif-preload"
-                aria-hidden="true"
-                decoding="async"
-                onLoad={() => setGifLoaded(true)}
-                onError={() => setGifLoaded(true)}
-              />
-            )}
-
-            <AnimatePresence>
-              {phase === "gif" && reactionGifSrc && (
-                <motion.div
-                  className="trivia-gif-overlay"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  <div className="trivia-gif-popup">
+                  {phase === "feedback" && reactionGifSrc && (
                     <img
                       src={reactionGifSrc}
                       alt=""
-                      className="trivia-gif-img"
+                      className="trivia-gif-preload"
+                      aria-hidden="true"
                       decoding="async"
-                      fetchPriority="high"
+                      onLoad={() => setGifLoaded(true)}
+                      onError={() => setGifLoaded(true)}
                     />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  )}
+                </div>
+
+                <AnimatePresence>
+                  {phase === "gif" && reactionGifSrc && (
+                    <motion.div
+                      className="trivia-gif-overlay"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <div className="trivia-gif-popup">
+                        <img
+                          src={reactionGifSrc}
+                          alt=""
+                          className="trivia-gif-img"
+                          decoding="async"
+                          fetchPriority="high"
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </motion.div>
         )}
 

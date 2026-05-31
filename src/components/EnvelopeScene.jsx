@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
+import { preloadGifs } from "../assets/gifs.js";
 import {
   EnvelopeBack,
   EnvelopePocket,
@@ -49,6 +50,10 @@ export default function EnvelopeScene() {
   const envelope = useAnimationControls();
   const foldTop = useAnimationControls();
   const foldBot = useAnimationControls();
+
+  useEffect(() => {
+    preloadGifs();
+  }, []);
 
   useEffect(() => {
     const fit = () => {

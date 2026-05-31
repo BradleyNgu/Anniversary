@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { preloadGifs } from "../assets/gifs.js";
 import PhotoAlbum from "./PhotoAlbum.jsx";
 import TriviaGame from "./TriviaGame.jsx";
 import SectionGif from "./SectionGif.jsx";
@@ -41,10 +42,10 @@ const sections = [
     body: "Words from the heart — read them when you're ready.",
     gif: {
       position: "bottom",
-      src: null,
-      alt: "Love letter animation",
+      src: "/assets/CatKiss.gif",
+      alt: "Cat kiss animation",
       placeholderLabel: "Love letter GIF",
-      fileHint: "love-letter.gif",
+      fileHint: "CatKiss.gif",
     },
     placeholder: "Your love letter text will go here.",
   },
@@ -80,32 +81,32 @@ function SectionContent({ section }) {
           <div className="section-placeholder">{section.placeholder}</div>
         )
       )}
-      <AnimatePresence>
-        {showGif && (
-          <motion.div
-            key="section-gif"
-            className="section-gif-motion"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <SectionGif
-              src={section.gif.src ?? null}
-              position="bottom"
-              alt={section.gif.alt}
-              placeholderLabel={section.gif.placeholderLabel}
-              fileHint={section.gif.fileHint}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {section.gif && (
+        <div
+          className={`section-gif-motion${showGif ? "" : " section-gif-motion--hidden"}`}
+          aria-hidden={!showGif}
+        >
+          <SectionGif
+            src={section.gif.src ?? null}
+            position="bottom"
+            alt={section.gif.alt}
+            placeholderLabel={section.gif.placeholderLabel}
+            fileHint={section.gif.fileHint}
+          />
+        </div>
+      )}
     </div>
   );
 }
 export default function Sections() {
   const [[index, dir], setState] = useState([0, 0]);
   const total = sections.length;
+
+  useEffect(() => {
+    preloadGifs(
+      sections.map((section) => section.gif?.src).filter(Boolean),
+    );
+  }, []);
 
   const go = (next) => {
     const target = Math.min(total - 1, Math.max(0, next));

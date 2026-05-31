@@ -76,3 +76,23 @@ body {
     opacity: 0;
   }
 }
+
+.gif-cache {
+  position: fixed;
+  top: 0;
+  left: -9999px;
+  width: 340px;
+  height: 168px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: -1;
+}
+
+.gif-cache img {
+  display: block;
+  width: 340px;
+  height: 168px;
+  object-fit: contain;
+}

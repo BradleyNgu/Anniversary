@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { isGifCached } from "../assets/gifs.js";
 
-function GifFrame({ children, placeholder, label }) {
+function GifFrame({ children, placeholder, label, loading }) {
   return (
     <div className="section-gif-scallop">
       <div
-        className={`section-gif-frame${placeholder ? " section-gif-frame--placeholder" : ""}`}
+        className={`section-gif-frame${placeholder ? " section-gif-frame--placeholder" : ""}${loading ? " section-gif-frame--loading" : ""}`}
         role={label ? "img" : undefined}
         aria-label={label}
       >
@@ -14,10 +15,6 @@ function GifFrame({ children, placeholder, label }) {
   );
 }
 
-/**
- * Drop GIFs into public/assets/gifs/ and set `src` on each section.
- * Example: src: "/assets/gifs/trivia.gif"
- */
 export default function SectionGif({
   src,
   position = "bottom",
@@ -25,7 +22,14 @@ export default function SectionGif({
   placeholderLabel,
   fileHint,
 }) {
+  const [ready, setReady] = useState(() => isGifCached(src));
   const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+    setReady(isGifCached(src));
+  }, [src]);
+
   const showPlaceholder = !src || failed;
 
   if (showPlaceholder) {
@@ -53,13 +57,15 @@ export default function SectionGif({
 
   return (
     <div className={`section-gif section-gif--${position}`}>
-      <GifFrame>
+      <GifFrame loading={!ready} label={alt}>
         <img
           src={src}
           alt={alt}
           loading="eager"
           fetchPriority="high"
-          decoding="async"
+          decoding="sync"
+          className={ready ? "section-gif-img--ready" : "section-gif-img--loading"}
+          onLoad={() => setReady(true)}
           onError={() => setFailed(true)}
         />
       </GifFrame>
