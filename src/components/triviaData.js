@@ -34,12 +34,32 @@ export const triviaQuestions = [
   },
   {
     id: 3,
-    question: "Sample question 3 — favorite shared memory?",
+    question: "Question 3 - What was the first restaurant we went to alone together?",
     answers: [
-      { text: "Sample answer A (mark correct)", correct: true },
-      { text: "Sample answer B", correct: false },
-      { text: "Sample answer C", correct: false },
-      { text: "Sample answer D", correct: false },
+      { text: "Waton kabob", correct: true },
+      { text: "Gyubee", correct: false },
+      { text: "Sammi & Soupe Dumpling", correct: false },
+      { text: "Shawarma Palace", correct: false },
+    ],
+  },
+  {
+    id: 4,
+    question: "Question 4 - What did Bradley wear on the first date?",
+    answers: [
+      { text: "All white", correct: false },
+      { text: "All black", correct: true },
+      { text: "Hoodie and sweatpants", correct: false },
+      { text: "Nothing", correct: false },
+    ],
+  },
+  {
+    id: 5,
+    question: "Question 5 - What was the first movie we watched together?",
+    answers: [
+      { text: "Project Hail Mary", correct: false },
+      { text: "Scary Movie", correct: false },
+      { text: "F1: The Movie", correct: true },
+      { text: "La La Land", correct: false },
     ],
   },
 ];
