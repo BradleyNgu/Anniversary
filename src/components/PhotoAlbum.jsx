@@ -2,18 +2,49 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const PHOTOS_PER_PAGE = 4;
+const PHOTO_BASE = "/assets/scrapbook/photoalbum";
 
-/** Add photos here — pages are created automatically (4 per spread). */
-const photos = [
-  { id: 1, src: null, caption: "our beginning", rotate: -4, tape: "rose" },
-  { id: 2, src: null, caption: "a favorite day", rotate: 3, tape: "gold" },
-  { id: 3, src: null, caption: "little moments", rotate: -2, tape: "gold" },
-  { id: 4, src: null, caption: "always us", rotate: 5, tape: "rose" },
-  { id: 5, src: null, caption: "date night", rotate: -3, tape: "gold" },
-  { id: 6, src: null, caption: "silly faces", rotate: 4, tape: "rose" },
-  { id: 7, src: null, caption: "somewhere new", rotate: -5, tape: "gold" },
-  { id: 8, src: null, caption: "home together", rotate: 2, tape: "rose" },
+const PHOTO_FILES = [
+  "20250720_152643.jpg",
+  "20250803_145931.jpg",
+  "20251123_193524.jpg",
+  "20251214_142501.jpg",
+  "20260104_203913.jpg",
+  "20260227_112439.jpg",
+  "20260501_142942.jpg",
+  "20260501_143720.jpg",
+  "DSC00037.JPG",
+  "DSC00054.JPG",
+  "DSC00062.JPG",
+  "DSC00110.JPG",
+  "DSC09583.jpg",
+  "IMG_20250926_110002_460.jpg",
+  "IMG_4543.heic",
+  "IMG_5610.HEIC.heif",
 ];
+
+const CAPTIONS = [
+  "our beginning",
+  "a favorite day",
+  "little moments",
+  "always us",
+  "date night",
+  "silly faces",
+  "somewhere new",
+  "home together",
+];
+
+const ROTATES = [-4, 3, -2, 5, -3, 4, -5, 2];
+const TAPES = ["rose", "gold"];
+
+/** Pages are created automatically (4 photos per spread). */
+const photos = PHOTO_FILES.map((file, i) => ({
+  id: i + 1,
+  src: `${PHOTO_BASE}/${file}`,
+  caption: CAPTIONS[i % CAPTIONS.length],
+  rotate: ROTATES[i % ROTATES.length],
+  tape: TAPES[i % TAPES.length],
+}));
 
 function chunkPhotos(list, size) {
   const pages = [];
