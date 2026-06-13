@@ -1173,7 +1173,7 @@
 }
 
 .flower-svg {
-  width: min(240px, 72vw);
+  width: min(320px, 92vw);
   height: auto;
   overflow: visible;
 }

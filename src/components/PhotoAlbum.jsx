@@ -19,8 +19,8 @@ const PHOTO_FILES = [
   "DSC00110.JPG",
   "DSC09583.jpg",
   "IMG_20250926_110002_460.jpg",
-  "IMG_4543.heic",
-  "IMG_5610.HEIC.heif",
+  "IMG_4543.jpg",
+  "IMG_5610.jpg",
 ];
 
 const CAPTIONS = [
