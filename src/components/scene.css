@@ -437,6 +437,153 @@
   text-align: center;
 }
 
+/* ---------- Love letter ---------- */
+.section-area--letter {
+  padding: 20px 24px 14px;
+}
+
+.section-area--letter .section-viewport {
+  overflow: hidden;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.section-area--letter .section-motion {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-slide--letter {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  gap: 0;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.section-slide--letter .section-eyebrow {
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.section-slide--letter .section-title {
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.love-letter {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.love-letter-sheet {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding: 16px;
+  padding: 22px 24px 20px;
+  border-radius: 10px;
+  background: rgba(255, 252, 247, 0.82);
+  border: 1px solid rgba(176, 130, 90, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 2px 12px rgba(120, 60, 60, 0.06);
+  text-align: left;
+}
+
+.love-letter-content {
+  flex: 1 1 auto;
+}
+
+.love-letter-greeting {
+  font-size: clamp(24px, 4.5vw, 30px);
+  color: var(--rose-deep);
+  margin: 0 0 18px;
+  line-height: 1.25;
+}
+
+.love-letter-paragraph {
+  margin: 0 0 16px;
+  font-size: clamp(16px, 2.8vw, 18px);
+  line-height: 1.8;
+  color: var(--ink);
+  text-indent: 1.25em;
+}
+
+.love-letter-paragraph:first-of-type {
+  text-indent: 0;
+}
+
+.love-letter-paragraph:last-of-type {
+  margin-bottom: 0;
+}
+
+.love-letter-footer {
+  flex-shrink: 0;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(176, 130, 90, 0.22);
+  text-align: right;
+}
+
+.love-letter-signoff {
+  margin: 0;
+}
+
+.love-letter-closing {
+  margin: 0 0 8px;
+  font-size: clamp(16px, 2.8vw, 18px);
+  line-height: 1.5;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.love-letter-signature {
+  margin: 0;
+  font-size: clamp(28px, 5.5vw, 36px);
+  color: var(--rose-deep);
+  line-height: 1.15;
+}
+
+.love-letter-date {
+  margin: 12px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.section-area--letter .section-gif-motion {
+  flex-shrink: 0;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.section-area--letter .section-gif {
+  margin-top: 0;
+}
+
+.section-area--letter .section-gif-inner img {
+  max-height: 96px;
+  max-width: min(100%, 280px);
+}
+
+.section-area--letter .section-gif-frame--loading .section-gif-inner {
+  min-height: 88px;
+}
+
 /* GIF slot — always at bottom of each section */
 .section-gif {
   display: flex;
@@ -1428,5 +1575,41 @@
 
   .section-body {
     font-size: 18px;
+  }
+
+  .section-area--letter {
+    padding: 16px 14px 10px;
+  }
+
+  .section-slide--letter .section-eyebrow {
+    margin-bottom: 6px;
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .section-slide--letter .section-title {
+    margin-bottom: 6px;
+  }
+
+  .love-letter-sheet {
+    padding: 18px 16px 16px;
+  }
+
+  .love-letter-greeting {
+    margin-bottom: 14px;
+  }
+
+  .love-letter-paragraph {
+    margin-bottom: 14px;
+    line-height: 1.75;
+  }
+
+  .love-letter-footer {
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .section-area--letter .section-gif-inner img {
+    max-height: 80px;
   }
 }
