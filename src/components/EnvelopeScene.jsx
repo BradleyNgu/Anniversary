@@ -180,6 +180,7 @@ export default function EnvelopeScene() {
 
   const folding = step === "opening";
   const showFlipLetter = step === "flipping" || step === "open";
+  const letterFlat = step === "open";
 
   return (
     <div className="stage-wrap">
@@ -286,17 +287,19 @@ export default function EnvelopeScene() {
       {/* ----- Cover flips over horizontally to reveal sections ----- */}
       {showFlipLetter && (
         <div
-          className={`letter-flip-scene${step === "open" ? " letter-flip-scene--open" : ""}`}
+          className={`letter-flip-scene${letterFlat ? " letter-flip-scene--open letter-flip-scene--flat" : ""}`}
         >
           <motion.div
-            className="letter-flip"
-            animate={flip}
-            initial={{ rotateY: 0 }}
-            style={{ transformPerspective: 1600 }}
+            className={`letter-flip${letterFlat ? " letter-flip--flat" : ""}`}
+            animate={letterFlat ? false : flip}
+            initial={false}
+            style={letterFlat ? undefined : { transformPerspective: 1600 }}
           >
-            <div className="letter-flip-face letter-flip-face--front">
-              <LetterCover />
-            </div>
+            {!letterFlat && (
+              <div className="letter-flip-face letter-flip-face--front">
+                <LetterCover />
+              </div>
+            )}
             <div className="letter-flip-face letter-flip-face--back">
               <div className="open-letter">
                 <Sections />

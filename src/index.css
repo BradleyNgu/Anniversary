@@ -35,8 +35,13 @@ body {
       transparent 60%
     ),
     linear-gradient(160deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
-  overflow: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
 }
 
 .script {
