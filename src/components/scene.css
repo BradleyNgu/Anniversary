@@ -409,7 +409,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .section-slide {
@@ -743,6 +744,10 @@
 
 .section-area--scrapbook .section-viewport {
   overflow: visible;
+}
+
+.section-slide--scrapbook {
+  justify-content: flex-start;
 }
 
 .section-slide--scrapbook .section-eyebrow {
