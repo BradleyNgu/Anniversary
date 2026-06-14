@@ -112,6 +112,7 @@ function SectionContent({ section }) {
 }
 export default function Sections() {
   const [index, setIndex] = useState(0);
+  const [areaType, setAreaType] = useState(sections[0].type);
   const total = sections.length;
 
   useEffect(() => {
@@ -131,10 +132,13 @@ export default function Sections() {
   return (
     <>
       <div
-        className={`section-area${s.type === "scrapbook" ? " section-area--scrapbook" : ""}${s.type === "trivia" ? " section-area--trivia" : ""}${s.type === "letter" ? " section-area--letter" : ""}`}
+        className={`section-area${areaType === "scrapbook" ? " section-area--scrapbook" : ""}${areaType === "trivia" ? " section-area--trivia" : ""}${areaType === "letter" ? " section-area--letter" : ""}`}
       >
         <div className="section-viewport">
-          <AnimatePresence mode="wait">
+          <AnimatePresence
+            mode="wait"
+            onExitComplete={() => setAreaType(sections[index].type)}
+          >
             <motion.div
               key={index}
               variants={variants}

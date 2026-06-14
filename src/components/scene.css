@@ -374,18 +374,26 @@
 }
 
 .section-viewport {
+  position: relative;
   flex: 1;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
   min-height: 0;
+  overflow: hidden;
 }
 
-.section-motion,
+.section-motion {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .section-slide {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -442,25 +450,12 @@
   padding: 20px 24px 14px;
 }
 
-.section-area--letter .section-viewport {
-  overflow: hidden;
-  align-items: stretch;
-  justify-content: flex-start;
-}
-
-.section-area--letter .section-motion {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
 .section-slide--letter {
-  flex: 1;
   min-height: 0;
   width: 100%;
+  height: 100%;
   gap: 0;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
@@ -475,17 +470,20 @@
 }
 
 .love-letter {
-  flex: 1;
+  flex: 0 1 auto;
   min-height: 0;
-  width: 100%;
+  width: min(420px, 92%);
   max-width: 420px;
+  max-height: min(400px, 54vh);
   margin: 0 auto;
   display: flex;
+  overflow: hidden;
 }
 
 .love-letter-sheet {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
+  max-height: min(400px, 54vh);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -493,7 +491,7 @@
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scroll-padding: 16px;
-  padding: 22px 24px 20px;
+  padding: 20px 22px 18px;
   border-radius: 10px;
   background: rgba(255, 252, 247, 0.82);
   border: 1px solid rgba(176, 130, 90, 0.38);
@@ -980,13 +978,7 @@
 }
 
 .section-area--trivia .section-viewport {
-  align-items: stretch;
-}
-
-.section-area--trivia .section-motion {
-  height: 100%;
-  min-height: 0;
-  align-self: stretch;
+  overflow: hidden;
 }
 
 .section-slide--trivia {
@@ -1591,8 +1583,15 @@
     margin-bottom: 6px;
   }
 
+  .love-letter {
+    width: min(100%, 340px);
+    max-width: 340px;
+    max-height: min(300px, 46vh);
+  }
+
   .love-letter-sheet {
-    padding: 18px 16px 16px;
+    max-height: min(300px, 46vh);
+    padding: 16px 14px 14px;
   }
 
   .love-letter-greeting {
