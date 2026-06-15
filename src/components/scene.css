@@ -1616,8 +1616,8 @@
   }
 
   .love-letter {
-    width: min(100%, 340px);
-    max-width: 340px;
+    width: min(88%, 320px);
+    max-width: 320px;
     height: min(300px, 46vh);
     max-height: min(300px, 46vh);
   }
@@ -1643,5 +1643,88 @@
 
   .section-area--letter .section-gif-inner img {
     max-height: 80px;
+  }
+}
+
+/* Short screens: shrink scrapbook GIF and reduce spacing */
+@media (max-height: 680px) {
+  .section-slide--scrapbook .section-gif-motion {
+    margin-top: 4px;
+  }
+
+  .section-slide--scrapbook .section-gif-inner img {
+    max-height: 60px;
+    max-width: min(100%, 180px);
+  }
+
+  .section-slide--scrapbook .section-gif-frame--loading .section-gif-inner {
+    min-height: 52px;
+  }
+
+  .section-slide--scrapbook .section-body {
+    display: none;
+  }
+
+  .section-slide--scrapbook .section-eyebrow {
+    margin-bottom: 4px;
+  }
+
+  .section-slide--scrapbook .section-title {
+    margin-bottom: 6px;
+  }
+
+  .scrapbook {
+    margin-top: 2px;
+  }
+
+  .scrapbook-nav {
+    margin-top: 6px;
+    padding: 5px 8px;
+  }
+}
+
+/* Very short screens: also shrink polaroids */
+@media (max-height: 600px) {
+  .scrapbook {
+    max-width: 240px;
+  }
+
+  .scrapbook-page {
+    padding: 8px 6px 6px;
+  }
+
+  .scrapbook-grid {
+    gap: 5px 4px;
+  }
+
+  .polaroid {
+    padding: 3px 3px 16px;
+  }
+
+  .polaroid-caption {
+    font-size: 10px;
+    padding-top: 3px;
+  }
+
+  .scrapbook-nav {
+    margin-top: 4px;
+    padding: 4px 6px;
+  }
+
+  .scrapbook-nav-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+/* Very narrow screens: tighten love letter further */
+@media (max-width: 380px) {
+  .love-letter {
+    width: 92%;
+    max-width: 100%;
+  }
+
+  .love-letter-sheet {
+    padding: 14px 12px 12px;
   }
 }
