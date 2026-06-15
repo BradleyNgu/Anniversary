@@ -8,7 +8,7 @@ export const wrongAnswerGif = "/assets/consumed-by-hatred-kitten.gif";
 
 export const triviaIntro = {
   title: "Our Little Quiz",
-  body: "Sample intro text — replace this with your own words before the game starts.",
+  body: "Here is a little quiz to test your knowledge of us. See how well you know us!",
 };
 
 export const triviaQuestions = [
