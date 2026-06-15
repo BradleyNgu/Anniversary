@@ -10,5 +10,5 @@ export const loveLetter = {
   ],
   closing: "Forever yours,",
   signature: "Bradley",
-  date: "July 14, 2026",
+  date: "July 20, 2026",
 };

@@ -1065,6 +1065,13 @@
   text-align: center;
 }
 
+.trivia-panel:not(.trivia-panel--round) {
+  width: min(300px, 88%);
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .section-area--trivia:has(.trivia--gif-active) {
   overflow: visible;
 }
@@ -1532,6 +1539,11 @@
 
   .trivia-intro-title {
     font-size: clamp(24px, 6.5vw, 30px);
+  }
+
+  .trivia-panel:not(.trivia-panel--round) {
+    width: min(280px, 86%);
+    max-width: 280px;
   }
 
   .trivia-intro-body {
