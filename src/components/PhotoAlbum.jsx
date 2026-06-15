@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const PHOTOS_PER_PAGE = 4;
@@ -72,7 +72,32 @@ const pageVariants = {
   }),
 };
 
+function preloadPhotos(pagePhotos) {
+  pagePhotos.forEach((photo) => {
+    if (!photo.src) return;
+    const img = new Image();
+    img.src = photo.src;
+  });
+}
+
 function Polaroid({ photo }) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(false);
+    if (!photo.src) return;
+
+    const img = new Image();
+    img.src = photo.src;
+    if (img.complete) {
+      setLoaded(true);
+      return;
+    }
+
+    img.onload = () => setLoaded(true);
+    img.onerror = () => setLoaded(true);
+  }, [photo.src]);
+
   return (
     <figure
       className="polaroid"
@@ -81,9 +106,19 @@ function Polaroid({ photo }) {
       {photo.tape && (
         <span className={`polaroid-tape polaroid-tape--${photo.tape}`} />
       )}
-      <div className="polaroid-inner">
+      <div className={`polaroid-inner${loaded ? "" : " polaroid-inner--loading"}`}>
         {photo.src ? (
-          <img src={photo.src} alt={photo.caption} className="polaroid-img" />
+          <>
+            {!loaded && <div className="polaroid-skeleton" aria-hidden="true" />}
+            <img
+              src={photo.src}
+              alt={photo.caption}
+              className={`polaroid-img${loaded ? " polaroid-img--ready" : " polaroid-img--loading"}`}
+              onLoad={() => setLoaded(true)}
+              onError={() => setLoaded(true)}
+              decoding="async"
+            />
+          </>
         ) : (
           <div className="polaroid-empty">
             <span className="polaroid-empty-icon">♥</span>
@@ -119,6 +154,16 @@ export default function PhotoAlbum() {
   const pages = useMemo(() => chunkPhotos(photos, PHOTOS_PER_PAGE), []);
   const [[page, dir], setPage] = useState([0, 0]);
   const total = pages.length;
+
+  useEffect(() => {
+    pages.forEach(preloadPhotos);
+  }, [pages]);
+
+  useEffect(() => {
+    [page - 1, page, page + 1]
+      .filter((i) => i >= 0 && i < total)
+      .forEach((i) => preloadPhotos(pages[i]));
+  }, [page, pages, total]);
 
   const flip = (next) => {
     const target = Math.min(total - 1, Math.max(0, next));

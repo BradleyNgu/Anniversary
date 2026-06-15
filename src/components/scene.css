@@ -873,9 +873,38 @@
 }
 
 .polaroid-inner {
+  position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #f0ebe3;
+}
+
+.polaroid-inner--loading {
+  background: #ebe4d8;
+}
+
+.polaroid-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    #ebe4d8 0%,
+    #ebe4d8 35%,
+    #f5f0e8 50%,
+    #ebe4d8 65%,
+    #ebe4d8 100%
+  );
+  background-size: 200% 100%;
+  animation: polaroid-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes polaroid-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 
 .polaroid-img {
@@ -883,6 +912,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.25s ease;
+}
+
+.polaroid-img--loading {
+  opacity: 0;
+}
+
+.polaroid-img--ready {
+  opacity: 1;
 }
 
 .polaroid-empty {
