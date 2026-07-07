@@ -14,7 +14,7 @@ export const triviaIntro = {
 export const triviaQuestions = [
   {
     id: 1,
-    question: "Question 1 — where was our first meet?",
+    question: "Question 1 — where was our first meet alone?",
     answers: [
       { text: "Carleton University", correct: false },
       { text: "Movie Theatre", correct: true },
@@ -62,4 +62,72 @@ export const triviaQuestions = [
       { text: "La La Land", correct: false },
     ],
   },
+  {
+    id: 6,
+    question: "Question 6 - What is Bradley's nickname",
+    answers: [
+      { text: "Bronchacho", correct: false },
+      { text: "Bread", correct: true },
+      { text: "Breadster", correct: false },
+      { text: "Brad", correct: false },
+    ],
+  },
+  {
+    id: 7,
+    question: "Question 7 - What was the name saved in Bradley's phone for the first 6 months?",
+    answers: [
+      { text: "Nicole Runa", correct: true },
+      { text: "Nicole Espey", correct: false },
+      { text: "Nicole my Lurtz", correct: false },
+      { text: "Watermelon Lover", correct: false },
+    ],
+  },
+  {
+    id: 8,
+    question: "Question 8 - Where did we go skiing together for the first time?",
+    answers: [
+      { text: "Blue Mountain", correct: false },
+      { text: "Mont Tremblant", correct: false },
+      { text: "Camp Fortune", correct: true },
+      { text: "Glen Eden", correct: false },
+    ],
+  },
+  {
+    id: 9,
+    question: "Question 9 - What did we have for dinner on our date in Brampton?",
+    answers: [
+      { text: "Chinese food", correct: false },
+      { text: "Indian food", correct: true },
+      { text: "Italian food", correct: false },
+      { text: "Mexican food", correct: false },
+    ],
+  },
+  {
+    id: 10,
+    question: "Question 10 - What name would we name our dog?",
+    answers: [
+      { text: "Lurtz", correct: false },
+      { text: "Gloria", correct: false },
+      { text: "Bertholomew", correct: false },
+      { text: "Paul", correct: true },
+    ],
+  },
+  {
+    id: 11,
+    question: "Question 11 - Who is the hottest person to exist?",
+    answers: [
+      { text: "Bradley", correct: false },
+      { text: "Nicole", correct: false },
+      { text: "Lurtz", correct: true },
+      { text: "King Juilian", correct: false },
+    ],
+  },
+  {
+    id: 11,
+    question: "Question 10 - Who loves each other the most?",
+    answers: [
+      { text: "Bradley", correct: true},
+      { text: "Nicole", correct: true },
+    ],
+  }
 ];
