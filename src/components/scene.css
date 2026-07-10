@@ -813,17 +813,6 @@
     0 6px 18px rgba(90, 60, 40, 0.14);
 }
 
-.scrapbook-page-label {
-  position: absolute;
-  top: 6px;
-  left: 10px;
-  font-size: 13px;
-  color: var(--ink-soft);
-  opacity: 0.55;
-  z-index: 2;
-  pointer-events: none;
-}
-
 .scrapbook-sticker {
   position: absolute;
   font-size: 14px;
@@ -913,6 +902,10 @@
   height: 100%;
   object-fit: cover;
   transition: opacity 0.25s ease;
+}
+
+.polaroid-img--contain {
+  object-fit: contain;
 }
 
 .polaroid-img--loading {

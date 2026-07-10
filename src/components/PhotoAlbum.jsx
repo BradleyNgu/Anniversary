@@ -9,33 +9,49 @@ const PHOTO_FILES = [
   "20250803_145931.jpg",
   "20251123_193524.jpg",
   "20251214_142501.jpg",
-  "20260104_203913.jpg",
   "20260227_112439.jpg",
   "20260501_142942.jpg",
   "20260501_143720.jpg",
+  "20260621_131118.jpg",
   "DSC00037.JPG",
   "DSC00054.JPG",
   "DSC00062.JPG",
   "DSC00110.JPG",
   "DSC09583.jpg",
   "IMG_20250926_110002_460.jpg",
+  "IMG_20260609_161914_257.jpg",
+  "IMG_20260705_115316_251.jpg",
   "IMG_4543.jpg",
   "IMG_5610.jpg",
 ];
 
 const CAPTIONS = [
-  "our beginning",
-  "a favorite day",
-  "little moments",
-  "always us",
-  "date night",
-  "silly faces",
-  "somewhere new",
-  "home together",
+  "Our beginning",
+  "Time in Brampton",
+  "Christmas market",
+  "First time skiing",
+  "Mont Tremblant",
+  "My love",
+  "My Lurtz",
+  "Cambridge",
+  "Debut of Venana",
+  "The terrifying truth",
+  "Landsdowne",
+  "Time in Toronto",
+  "Jingle Jamble Jubilee",
+  "The Thanh Experience",
+  "Not our anniversary",
+  "Photo booth photos",
+  "Blue Mountain",
+  "Paul",
+
 ];
 
 const ROTATES = [-4, 3, -2, 5, -3, 4, -5, 2];
 const TAPES = ["rose", "gold"];
+
+/** Photos that should show fully (no crop) inside the polaroid frame. */
+const CONTAIN_FILES = new Set(["IMG_20260705_115316_251.jpg"]);
 
 /** Pages are created automatically (4 photos per spread). */
 const photos = PHOTO_FILES.map((file, i) => ({
@@ -44,6 +60,7 @@ const photos = PHOTO_FILES.map((file, i) => ({
   caption: CAPTIONS[i % CAPTIONS.length],
   rotate: ROTATES[i % ROTATES.length],
   tape: TAPES[i % TAPES.length],
+  fit: CONTAIN_FILES.has(file) ? "contain" : "cover",
 }));
 
 function chunkPhotos(list, size) {
@@ -113,7 +130,7 @@ function Polaroid({ photo }) {
             <img
               src={photo.src}
               alt={photo.caption}
-              className={`polaroid-img${loaded ? " polaroid-img--ready" : " polaroid-img--loading"}`}
+              className={`polaroid-img${photo.fit === "contain" ? " polaroid-img--contain" : ""}${loaded ? " polaroid-img--ready" : " polaroid-img--loading"}`}
               onLoad={() => setLoaded(true)}
               onError={() => setLoaded(true)}
               decoding="async"
@@ -131,7 +148,7 @@ function Polaroid({ photo }) {
   );
 }
 
-function ScrapbookSpread({ pagePhotos, pageIndex }) {
+function ScrapbookSpread({ pagePhotos }) {
   return (
     <div className="scrapbook-page">
       <div className="scrapbook-sticker scrapbook-sticker--a" aria-hidden="true">
@@ -140,7 +157,6 @@ function ScrapbookSpread({ pagePhotos, pageIndex }) {
       <div className="scrapbook-sticker scrapbook-sticker--b" aria-hidden="true">
         ✿
       </div>
-      <div className="scrapbook-page-label script">page {pageIndex + 1}</div>
       <div className="scrapbook-grid">
         {pagePhotos.map((photo) => (
           <Polaroid key={photo.id} photo={photo} />
@@ -188,7 +204,7 @@ export default function PhotoAlbum() {
               transformOrigin: dir > 0 ? "left center" : "right center",
             }}
           >
-            <ScrapbookSpread pagePhotos={pages[page]} pageIndex={page} />
+            <ScrapbookSpread pagePhotos={pages[page]} />
           </motion.div>
         </AnimatePresence>
       </div>
