@@ -143,7 +143,9 @@ function Polaroid({ photo }) {
           </div>
         )}
       </div>
-      <figcaption className="polaroid-caption script">{photo.caption}</figcaption>
+      <figcaption className="polaroid-caption script">
+        <span className="polaroid-caption-text">{photo.caption}</span>
+      </figcaption>
     </figure>
   );
 }
