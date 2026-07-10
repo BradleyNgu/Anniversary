@@ -14,12 +14,12 @@ export const triviaIntro = {
 export const triviaQuestions = [
   {
     id: 1,
-    question: "Question 1 — where was our first meet alone?",
+    question: "Question 1 — What was the first movie we watched together?",
     answers: [
-      { text: "Carleton University", correct: false },
-      { text: "Movie Theatre", correct: true },
-      { text: "Karoke", correct: false },
-      { text: "Square One Mall", correct: false },
+      { text: "F1: The Movie", correct: false },
+      { text: "Final Destination: Bloodline", correct: true },
+      { text: "One Piece Movie: Red", correct: false },
+      { text: "The Matrix", correct: false },
     ],
   },
   {
