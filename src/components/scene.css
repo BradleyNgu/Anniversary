@@ -742,29 +742,37 @@
   padding: 20px 24px 14px;
 }
 
-.section-area--scrapbook .section-viewport {
-  overflow: visible;
+.section-area--scrapbook .section-viewport,
+.section-area--scrapbook .section-motion {
+  overflow: hidden;
 }
 
 .section-slide--scrapbook {
-  justify-content: center;
-  min-height: 100%;
-  height: auto;
+  justify-content: flex-start;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .section-slide--scrapbook .section-eyebrow {
   margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .section-slide--scrapbook .section-title {
   margin-bottom: 10px;
   font-size: clamp(28px, 6vw, 38px);
+  flex-shrink: 0;
 }
 
 .section-slide--scrapbook .section-body {
   margin-bottom: 8px;
   font-size: 16px;
   line-height: 1.45;
+  flex-shrink: 0;
 }
 
 .section-slide--scrapbook .section-gif {
@@ -778,16 +786,18 @@
 
 .scrapbook {
   width: 100%;
-  max-width: 300px;
+  max-width: 270px;
   margin: 6px auto 0;
   position: relative;
   z-index: 1;
+  flex: 0 1 auto;
+  min-height: 0;
 }
 
 .scrapbook-spread {
   perspective: 1000px;
   overflow: visible;
-  min-height: 200px;
+  min-height: 180px;
   padding: 0 6px;
 }
 
@@ -1598,12 +1608,12 @@
   }
 
   .scrapbook {
-    max-width: 268px;
+    max-width: 248px;
     margin-top: 4px;
   }
 
   .scrapbook-spread {
-    min-height: 185px;
+    min-height: 170px;
     padding: 0 4px;
   }
 
@@ -1731,7 +1741,7 @@
 /* Very short screens: also shrink polaroids */
 @media (max-height: 600px) {
   .scrapbook {
-    max-width: 240px;
+    max-width: 220px;
   }
 
   .scrapbook-page {
