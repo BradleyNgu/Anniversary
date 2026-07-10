@@ -17,7 +17,7 @@ export const triviaQuestions = [
     question: "Question 1 — What was the first movie we watched together?",
     answers: [
       { text: "F1: The Movie", correct: false },
-      { text: "Final Destination: Bloodline", correct: true },
+      { text: "Final Destination: Bloodlines", correct: true },
       { text: "One Piece Movie: Red", correct: false },
       { text: "The Matrix", correct: false },
     ],
