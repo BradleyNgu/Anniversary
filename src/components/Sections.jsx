@@ -83,7 +83,9 @@ function SectionContent({ section }) {
       <h1 className={`section-title${section.titleScript ? " script" : ""}`}>
         {section.title}
       </h1>
-      {!isTrivia && !isFlower && !isLetter && <p className="section-body">{section.body}</p>}
+      {!isTrivia && !isFlower && !isLetter && !isScrapbook && (
+        <p className="section-body">{section.body}</p>
+      )}
       {isTrivia ? (
         <TriviaGame onPhaseChange={setTriviaPhase} />
       ) : isScrapbook ? (

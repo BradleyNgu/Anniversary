@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const PHOTOS_PER_PAGE = 4;
+const PHOTOS_PER_PAGE = 6;
 const PHOTO_BASE = "/assets/scrapbook/photoalbum";
 
 const PHOTO_FILES = [
