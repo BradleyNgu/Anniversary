@@ -54,7 +54,7 @@ export const triviaQuestions = [
   },
   {
     id: 5,
-    question: "Question 5 - What was the first movie we watched together?",
+    question: "Question 5 - What was the first movie date we went on?",
     answers: [
       { text: "Project Hail Mary", correct: false },
       { text: "Scary Movie", correct: false },
